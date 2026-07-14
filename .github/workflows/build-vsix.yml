@@ -1,0 +1,55 @@
+name: Build VS Code Extension (VSIX)
+
+on:
+  push:
+    branches: [ main, master ] # main veya master branch'ine kod pushlandığında çalışır
+  pull_request:
+    branches: [ main, master ]
+  release:
+    types: [ created ] # Yeni bir GitHub Release oluşturduğunda da tetiklenir
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. GitHub'daki kodları makineye çek
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Node.js ortamını kur
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # 3. Bağımlılıkları yükle
+      - name: Install Dependencies
+        run: npm ci
+
+      # 4. Eklentiyi derle (Prepublish scriptini çalıştırır)
+      - name: Compile Extension
+        run: npm run vscode:prepublish
+
+      # 5. vsce aracını kullanarak VSIX paketini oluştur
+      - name: Package Extension
+        run: npx @vscode/vsce package --no-dependencies
+        # --no-dependencies parametresi, vsce'nin paketleme sırasında
+        # yarn/npm kilit dosyalarıyla ilgili çıkarabileceği olası uyarıları bypass eder.
+
+      # 6. Oluşan .vsix dosyasını GitHub Actions paneline yükle (Buradan indirebilirsin)
+      - name: Upload VSIX Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-custom-laravel-helper
+          path: "*.vsix"
+
+      # 7. EĞER bir GitHub Release oluşturduysan, dosyayı otomatik olarak o release'e ekle
+      - name: Upload to Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "*.vsix"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
