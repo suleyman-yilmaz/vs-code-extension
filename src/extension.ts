@@ -120,6 +120,7 @@ export async function activate(context: vscode.ExtensionContext) {
         { Eloquent: EloquentCompletion },
         { Validation: ValidationCompletion },
         { Blade: BladeCompletion },
+        { Route: RouteCompletion},
         { completionProvider: bladeComponentCompletion },
         { completionProvider: livewireComponentCompletion },
         { CodeActionProvider },
@@ -133,6 +134,7 @@ export async function activate(context: vscode.ExtensionContext) {
         import("./completion/Eloquent.js"),
         import("./completion/Validation.js"),
         import("./completion/Blade.js"),
+        import("./completion/Route.js"),
         import("./features/bladeComponent.js"),
         import("./features/livewireComponent.js"),
         import("./codeAction/codeActionProvider.js"),
@@ -162,6 +164,7 @@ export async function activate(context: vscode.ExtensionContext) {
     const delegatedRegistry = new Registry(
         ...completionProviders,
         new EloquentCompletion(),
+        new RouteCompletion(),
     );
 
     const validationRegistry = new Registry(new ValidationCompletion());
