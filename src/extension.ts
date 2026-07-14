@@ -120,7 +120,7 @@ export async function activate(context: vscode.ExtensionContext) {
         { Eloquent: EloquentCompletion },
         { Validation: ValidationCompletion },
         { Blade: BladeCompletion },
-        { Route: RouteCompletion},
+        { Route: RouteCompletion },
         { completionProvider: bladeComponentCompletion },
         { completionProvider: livewireComponentCompletion },
         { CodeActionProvider },

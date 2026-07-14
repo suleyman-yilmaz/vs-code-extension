@@ -23,7 +23,7 @@ export class Route implements CompletionProvider {
         const tags: FeatureTagParam[] = [
             {
                 method: "@",
-            }
+            },
         ];
 
         return tags;
@@ -51,7 +51,7 @@ export class Route implements CompletionProvider {
         context: vscode.CompletionContext,
     ): vscode.CompletionItem[] {
         const lineText = document.lineAt(position.line).text;
-        
+
         // İmlecin solundaki metni al
         const leftSide = lineText.substring(0, position.character);
 
@@ -65,22 +65,26 @@ export class Route implements CompletionProvider {
 
         // Rotaları filtrele (Eğer kullanıcı bir şey yazdıysa sadece içinde geçenleri öner, boşsa hepsini öner)
         const filteredRoutes = typedText
-            ? this.routes.filter(r => r.toLowerCase().includes(typedText))
+            ? this.routes.filter((r) => r.toLowerCase().includes(typedText))
             : this.routes;
 
         return filteredRoutes.map((routeName) => {
             // Öneri listesinde görünecek etiket (Arama kolaylığı için başında @ ile listelenir)
             let completeItem = new vscode.CompletionItem(
-                `@${routeName}`, 
-                vscode.CompletionItemKind.Snippet
+                `@${routeName}`,
+                vscode.CompletionItemKind.Snippet,
             );
-            
+
             completeItem.detail = "Laravel Route Snippet";
-            completeItem.documentation = new vscode.MarkdownString(`Inserts: \`{{ route('${routeName}') }}\``);
-            
-            // Seçildiğinde editöre yazılacak şablon. 
+            completeItem.documentation = new vscode.MarkdownString(
+                `Inserts: \`{{ route('${routeName}') }}\``,
+            );
+
+            // Seçildiğinde editöre yazılacak şablon.
             // ${0} sayesinde işlem bittiğinde imleç en sona otomatik konumlanır.
-            completeItem.insertText = new vscode.SnippetString(`{{ route('${routeName}') }}`);
+            completeItem.insertText = new vscode.SnippetString(
+                `{{ route('${routeName}') }}`,
+            );
 
             // Tetikleyici olan '@' işaretini ve kullanıcının yazdığı kelimeyi (örn: @home)
             // tamamen silip yerine yeni şablonu temizce yerleştirmek için aralık (range) belirliyoruz.
@@ -134,7 +138,7 @@ export class Route implements CompletionProvider {
         }
 
         const watcher = vscode.workspace.createFileSystemWatcher(
-            new vscode.RelativePattern(routesPath, "**/*.php")
+            new vscode.RelativePattern(routesPath, "**/*.php"),
         );
 
         watcher.onDidChange(() => this.scanRoutes());
