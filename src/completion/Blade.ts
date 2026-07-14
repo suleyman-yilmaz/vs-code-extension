@@ -58,6 +58,8 @@ export class Blade implements vscode.CompletionItemProvider {
 
     defaultDirectives(): { [key: string]: string | string[] } {
         return {
+            "@route(...)": "{{ route('${1}') }}",
+            "@asset(...)": "{{ asset('${1}') }}",
             "@if(...)": ["@if (${1})", indent("${2}"), "@endif"],
             "@error(...)": ["@error(${1})", indent("${2}"), "@enderror"],
             "@if(...) ... @else ... @endif": [
