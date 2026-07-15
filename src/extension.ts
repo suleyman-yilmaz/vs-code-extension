@@ -121,6 +121,7 @@ export async function activate(context: vscode.ExtensionContext) {
         { Validation: ValidationCompletion },
         { Blade: BladeCompletion },
         { Route: RouteCompletion },
+        { Asset: AssetCompletion },
         { completionProvider: bladeComponentCompletion },
         { completionProvider: livewireComponentCompletion },
         { CodeActionProvider },
@@ -135,6 +136,7 @@ export async function activate(context: vscode.ExtensionContext) {
         import("./completion/Validation.js"),
         import("./completion/Blade.js"),
         import("./completion/Route.js"),
+        import("./completion/Asset.js"),
         import("./features/bladeComponent.js"),
         import("./features/livewireComponent.js"),
         import("./codeAction/codeActionProvider.js"),
@@ -222,6 +224,11 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.languages.registerCompletionItemProvider(
             BLADE_LANGUAGES,
             new BladeCompletion(),
+            "@",
+        ),
+        vscode.languages.registerCompletionItemProvider(
+            BLADE_LANGUAGES,
+            new AssetCompletion(),
             "@",
         ),
         ...linkProviders.map((provider) =>
