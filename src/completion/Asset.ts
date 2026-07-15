@@ -6,7 +6,6 @@ import AutocompleteResult from "../parser/AutocompleteResult";
 import { getAssets } from "../repositories/asset"; // Hazır asset listesini çekiyoruz
 
 export class Asset implements vscode.CompletionItemProvider {
-
     /**
      * Eklenti motoruna '@' karakteri yazıldığında uyanmasını söylüyoruz.
      */
@@ -59,7 +58,9 @@ export class Asset implements vscode.CompletionItemProvider {
 
         // Asset'leri filtrele
         const filteredAssets = typedText
-            ? assetItems.filter((asset) => asset.path.toLowerCase().includes(typedText))
+            ? assetItems.filter((asset) =>
+                  asset.path.toLowerCase().includes(typedText),
+              )
             : assetItems;
 
         return filteredAssets.map((asset) => {
